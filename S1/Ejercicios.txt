@@ -1,0 +1,18 @@
+Para la instalación del software DOSBOX, en nuestro caso al estar en un 
+entorno de Windows simplemente ejecutaremos el instalador y determinaremos la localizacion donde almacenaremos el ejecutable.
+
+Para comprobar la correccion de la instalacion, ejecutaremos unos juegos clasicos
+
+[INSERTAR FOTO FUNCIONAMIENTO DE JUEGOS]
+
+A la hora de configurar DOSBOX, para enlazar la carpeta donde tenemos todo almacenado tendremos que montarla, en nuestro caso:
+	mount C C:\DOSBOX
+	
+Tambien pondremos el teclado en españor
+	keyb sp
+
+Le indicaremos el PATH de BC que es un compilador
+	path c:\bc\bin
+
+Por ultimo tenemos que localizarnos en el directorio c
+	c:
