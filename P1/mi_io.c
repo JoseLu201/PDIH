@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 #include <conio.h>
 #include <dos.h>
 
@@ -206,19 +207,133 @@ void printCube(int begin, int size){
     _setvideomode(MODOTEXTO);
 }
 
+/*
+algoritmo Bresenham
+*/
+int dx,dy,sx,sy,err,e2;
+void _drawLine(int x1, int y1,int x2, int y2,int color){
+    dx = abs(x2-x1);
+    dy = abs(y2-y1);
+    
+    if (x1 < x2) 
+        sx = 1;
+    else sx = -1;
+
+    if (y1 < y2)
+        sy = 1;
+    else sy = -1;
+    
+    err = dx - dy;
+
+    while(1){
+        pixel(x1, y1,color);
+        
+        if (x1 == x2 && y1 == y2)
+            break;
+        e2 = 2 * err;
+        if (e2 > -dy){
+            err -= dy;
+            x1 += sx;
+        }
+        if (e2 < dx){
+            err += dx;
+            y1 += sy;
+        }
+    }
+}
+//
+void _drawShapeTextColor(int x1, int y1, int x2, int y2, int colorFont, int colorBack){
+    union REGS inregs, outregs;
+
+  inregs.h.ah = 0x06; //Scroll up window
+  inregs.h.al = 0; //Lineas de scroll (0 = borrar)
+  inregs.h.bh = colorBack << 4 | colorFont; // Atributo de las líneas en blanco
+  /*
+  CH = Fila inicial de scan, CL = Fila final de scan
+  DH = Fila, DL = Columna
+  */
+  inregs.h.ch = x1; 
+  inregs.h.cl = y1; 
+  inregs.h.dh = x2;
+  inregs.h.dl = y2;
+
+  int86(0x10, &inregs, &outregs);
+}
+
+void _drawCubeVideoColor(int x, int y, int color){
+    union REGS inregs, outregs;
+    BYTE ret;
+
+    if((ret = _getvideomode()) != MODOGRAFICO){
+        _setvideomode(MODOGRAFICO);
+    }
+    
+    for(i = x; i < y; i++){
+        pixel(x,i,color);
+        pixel(y,i,color);
+    }
+
+    for(i = x; i <= y; i++){
+        pixel(i,x,color);
+        pixel(i,y,color);
+    }
+    
+    /*_pausa();
+    _setvideomode(0x03);*/
+}
+
+
 int size = 700;
 const char * str;
 int main(void){
-    cprintf( "Ejemplo de \"textbackground\" y \"textcolor\"\r\n\r\n" );
-   
-   str = "HOLA";
-   _textbackground(3);
-   cprintf( "Ejemplo de \"textbackground\" y \"textcolor\"\r\n\r\n" );
-   _textbackground(3);
-   printf( "Ejemplo de \"textbackground\" y \"textcolor\"\r\n\r\n" );
-   _textcolor(2,str);
+    int temp;
+    printf("Comprobacion de funciones:\n");
+
+    printf("Colocando el cursor en una posicion: \n");
+    _clrscr();
+    _gotoxy( 0x02,0x15);
+    printf("*\n");
+    _gotoxy( 0x03,0x16);
+    printf("*\n");
+    _gotoxy( 0x04,0x17);
+    printf("*\n");
+    _gotoxy( 0x05,0x18);
+    printf("*\n");
+
+
+
+    printf("Pulsa una tecla: \n");
+    temp=_getchar();
+
+    printf("\nHas pulsado: ");
+    _cputchar((char)temp);
+
+    printf("\nCursor invisible: ");
+    _setcursortype(0);
     _pausa();
-   printCube(10,size);
+    printf("\nCursor normal: ");
+    _setcursortype(1);
+    _pausa();
+    printf("\nCursor grueso: ");
+    _setcursortype(2);
+    _pausa();
+
+    //Volvemos al cursor normal
+    _setcursortype(1);
+
+    _drawShapeTextColor(3,3,10,10,1,2);
+    _clrscr();
+    _drawCubeVideoColor(10,100,0x01);
+    _drawCubeVideoColor(50,150,0x02);
+    _drawLine(10,10,50,50,0x03);
+    _drawLine(10,100,50,150,0x03);
+    _drawLine(100,100,150,150,0x03);
+    _drawLine(100,10,150,50,0x03);
+    
+    _pausa();
+    _setvideomode(0x03);
+    
+
 
    return 0;
 
