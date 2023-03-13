@@ -166,7 +166,7 @@ void _cputchar2(int c){
 
 void _printf(const char *cadena){
     //printf("%s",cadena);
-    for(i = 0; i < strlen(cadena); i++){
+    for(i = 0; i <= strlen(cadena); i++){
         printf("%c", cadena[i]);
         _cputchar2((int) cadena[i]);
     }
@@ -218,7 +218,7 @@ void _pausa(){
     int86(0x16, &inregs, &outregs);
 }
 
-void printCube(int begin, int size){
+void _printCube(int begin, int size){
     _setvideomode(MODOGRAFICO);
     
     for(i = begin; i < size; i++){ 
@@ -350,11 +350,12 @@ int main(void){
     _setcursortype(1);
 
     _textcolor(0x02);
+    _textbackground(0x03);
 
     _printf("\nhola");
     _pausa();
 
-
+    _printCube(0x03, 100);
     _drawShapeTextColor(3,3,10,10,1,2);
     _clrscr();
     _drawCubeVideoColor(10,100,0x01);
