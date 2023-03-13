@@ -11,6 +11,9 @@
 BYTE MODOTEXTO = 3;
 BYTE MODOGRAFICO = 4;
 
+unsigned int fontColor;
+unsigned int backGroundColor;
+
 //Colores
 /*
 #define BLACK 0
@@ -108,17 +111,20 @@ void _charcolor(int color, const char c){
  * @param color Color de la cadena
  * @param str Cadena
  */
-void _textcolor(int color, const char * str){
-    for( i = 0; i < strlen(str);i++ ){ 
+void _textcolor(int color){
+    /*for( i = 0; i < strlen(str);i++ ){ 
         _charcolor(color,str[i]);
         printf("%c", str[i]); 
     }
     printf("\n");
+    */
+   fontColor = color;
+
 }
 
 
 void _textbackground(int color){
-    union REGS inregs, outregs;
+    /*union REGS inregs, outregs;
 
     inregs.h.ah=0x0B;
     //inregs.h.al=98; // 'a'
@@ -126,8 +132,11 @@ void _textbackground(int color){
     inregs.h.bh=0x00;
     //inregs.x.cx=10; //Numero de veces que se repite 
 
-    int86(0x10, &inregs, &outregs);
+    int86(0x10, &inregs, &outregs);*/
+    backGroundColor = color;
 }
+
+
 void _clrscr(void){
     printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 }
@@ -140,8 +149,27 @@ void _clrscr(void){
 void _cputchar(char c){
     union REGS inregs, outregs;
     inregs.h.ah = 2;
+    inregs.h.bl= backGroundColor << 4 | fontColor;
     inregs.h.dl = c;
     int86(0x21, &inregs, &outregs);
+}
+void _cputchar2(int c){
+    union REGS inregs, outregs;
+    inregs.h.ah = 0x09;
+    inregs.h.al = c;
+    inregs.h.bl= backGroundColor << 4 | fontColor;
+    inregs.h.bh = 0x00;
+    inregs.x.cx = 1;
+    int86(0x10, &inregs, &outregs);
+    return;
+}
+
+void _printf(const char *cadena){
+    //printf("%s",cadena);
+    for(i = 0; i < strlen(cadena); i++){
+        printf("%c", cadena[i]);
+        _cputchar2((int) cadena[i]);
+    }
 }
 
 /**
@@ -320,6 +348,12 @@ int main(void){
 
     //Volvemos al cursor normal
     _setcursortype(1);
+
+    _textcolor(0x02);
+
+    _printf("\nhola");
+    _pausa();
+
 
     _drawShapeTextColor(3,3,10,10,1,2);
     _clrscr();
