@@ -14,14 +14,6 @@ BYTE MODOGRAFICO = 4;
 unsigned int fontColor;
 unsigned int backGroundColor;
 
-//Colores
-/*
-#define BLACK 0
-#define BLUE 1
-#define GREEN 2
-#define CYAN 3
-*/
-
 int i,j;
 
 void _gotoxy(int x, int y){
@@ -187,14 +179,25 @@ int _getchar(){
 	caracter = outregs.h.al;
 	return caracter;
 }
-/*
-int _getche(){
+
+void _putchar(char c){
+    union REGS inregs, outregs;
+
+	inregs.h.ah = 2;
+	inregs.h.dl = c;
+	
+    int86(0x21, &inregs, &outregs);
+
+}
+
+void _getche(){
+    int tmp;
     printf("\nPulsa una tecla... ");
-	int tmp = _getchar();
+	tmp = _getchar();
 
 	printf("\nHas pulsado: ");
 	_putchar( (char)tmp );
-}*/
+}
 
 /**
  * @brief Pinta un pixul en las coordenadas x,y del color c
@@ -211,6 +214,8 @@ void pixel(int x, int y, BYTE c){
     inregs.h.ah = 0x0C;
     int86(0x10, &inregs, &outregs);
 }
+
+
 
 void _pausa(){
     union REGS inregs, outregs;
@@ -269,7 +274,8 @@ void _drawLine(int x1, int y1,int x2, int y2,int color){
         }
     }
 }
-//
+
+
 void _drawShapeTextColor(int x1, int y1, int x2, int y2, int colorFont, int colorBack){
     union REGS inregs, outregs;
 
@@ -316,25 +322,58 @@ const char * str;
 int main(void){
     int temp;
     printf("Comprobacion de funciones:\n");
-
-    printf("Colocando el cursor en una posicion: \n");
     _clrscr();
+    printf("Colocando el cursor en una posicion: \n");
+    //_pausa();
+    //Conjunto para pintar "P1"
     _gotoxy( 0x02,0x15);
     printf("*\n");
-    _gotoxy( 0x03,0x16);
+    _gotoxy( 0x02,0x16);
+    printf("*\n");
+    _gotoxy( 0x02,0x17);
+    printf("*\n");
+    _gotoxy( 0x03,0x18);
     printf("*\n");
     _gotoxy( 0x04,0x17);
     printf("*\n");
-    _gotoxy( 0x05,0x18);
+     _gotoxy( 0x04,0x16);
     printf("*\n");
 
 
+    _gotoxy( 0x03,0x15);
+    printf("*\n");
+    _gotoxy( 0x04,0x15);
+    printf("*\n");
+    _gotoxy( 0x05,0x15);
+    printf("*\n");
+    _gotoxy( 0x6,0x15);
+    printf("*\n");
 
+    
+    _gotoxy( 0x04,0x23);
+    printf("*\n");
+    _gotoxy( 0x03,0x22);
+    printf("*\n");
+    _gotoxy( 0x02,0x23);
+    printf("*\n");
+    _gotoxy( 0x03,0x23);
+    printf("*\n");
+    _gotoxy( 0x04,0x23);
+    printf("*\n");
+    _gotoxy( 0x05,0x23);
+    printf("*\n");
+    _gotoxy( 0x6,0x23);
+    printf("*\n");
+
+    
+    
     printf("Pulsa una tecla: \n");
     temp=_getchar();
 
     printf("\nHas pulsado: ");
     _cputchar((char)temp);
+    printf("\nIgual con el getche\n");
+    _getche();
 
     printf("\nCursor invisible: ");
     _setcursortype(0);
@@ -352,12 +391,15 @@ int main(void){
     _textcolor(0x02);
     _textbackground(0x03);
 
-    _printf("\nhola");
+    _printf("\nProbando el cambio de color de letra y fondo");
     _pausa();
+    _clrscr();
+
+    _drawShapeTextColor(3,3,10,10,1,4);
+    _pausa();
+    _clrscr();
 
     _printCube(0x03, 100);
-    _drawShapeTextColor(3,3,10,10,1,2);
-    _clrscr();
     _drawCubeVideoColor(10,100,0x01);
     _drawCubeVideoColor(50,150,0x02);
     _drawLine(10,10,50,50,0x03);
