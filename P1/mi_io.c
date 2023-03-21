@@ -1,4 +1,13 @@
-//#include <mi_io.h>
+/**
+ * @file mi_io.c
+ * @author Jose Luis Molina Aguilar, Sergio España Maldonado
+ * @brief 
+ * @version 0.1
+ * @date 2023-03-21
+ * 
+ * @copyright Copyright (c) 2023
+ * 
+ */
 
 #include <stdio.h>
 #include <string.h>
@@ -15,7 +24,12 @@ unsigned int fontColor;
 unsigned int backGroundColor;
 
 int i,j;
-
+/**
+ * @brief Pone el cursor en las coordenadas
+ * 
+ * @param x Coordenada x de la pantalla
+ * @param y Coordenada y de la pantalla
+ */
 void _gotoxy(int x, int y){
     union REGS inregs, outregs;
 
@@ -26,6 +40,7 @@ void _gotoxy(int x, int y){
 
     int86(0x10,&inregs,&outregs);
 }
+
 void _setcursortype(int tipo_cursor){
 	union REGS inregs, outregs;
 	inregs.h.ah = 0x01;
@@ -53,12 +68,9 @@ void _setvideomode(BYTE mode){
     inregs.h.al=mode; //Modo
     int86(0x10, &inregs, &outregs);
 }
-/**
- * @brief MODIFIFARRRRRRRRRR
- * 
- * @return BYTE 
- */
-BYTE _getvideomode(){
+
+
+BYTE _getvideomode(void){
     union REGS inregs, outregs;
     int modo;
     inregs.h.ah=0xF;
@@ -67,18 +79,6 @@ BYTE _getvideomode(){
     int86(0x10, &inregs, &outregs);
 
     return outregs.h.al;
-
-    /*if (x == 0x03){
-        printf("\nModo texto");
-    }else if (x == 0x02){
-        printf("\nModo samba");
-    }else if (x == 0x01){
-        printf("\nmodo epico");
-    }else if (x== 0x04){
-        printf("\nmodo grafico");
-    }else{
-        printf("\nmodo raro");
-    }*/
 }
 
 /**
@@ -104,27 +104,11 @@ void _charcolor(int color, const char c){
  * @param str Cadena
  */
 void _textcolor(int color){
-    /*for( i = 0; i < strlen(str);i++ ){ 
-        _charcolor(color,str[i]);
-        printf("%c", str[i]); 
-    }
-    printf("\n");
-    */
    fontColor = color;
-
 }
 
 
 void _textbackground(int color){
-    /*union REGS inregs, outregs;
-
-    inregs.h.ah=0x0B;
-    //inregs.h.al=98; // 'a'
-    inregs.h.bl=color;
-    inregs.h.bh=0x00;
-    //inregs.x.cx=10; //Numero de veces que se repite 
-
-    int86(0x10, &inregs, &outregs);*/
     backGroundColor = color;
 }
 
@@ -157,7 +141,6 @@ void _cputchar2(int c){
 }
 
 void _printf(const char *cadena){
-    //printf("%s",cadena);
     for(i = 0; i <= strlen(cadena); i++){
         printf("%c", cadena[i]);
         _cputchar2((int) cadena[i]);
@@ -169,7 +152,7 @@ void _printf(const char *cadena){
  * 
  * @return int 
  */
-int _getchar(){
+int _getchar(void){
 	union REGS inregs, outregs;
 	int caracter;
 
@@ -190,7 +173,7 @@ void _putchar(char c){
 
 }
 
-void _getche(){
+void _getche(void){
     int tmp;
     printf("\nPulsa una tecla... ");
 	tmp = _getchar();
@@ -215,9 +198,7 @@ void pixel(int x, int y, BYTE c){
     int86(0x10, &inregs, &outregs);
 }
 
-
-
-void _pausa(){
+void _pausa(void){
     union REGS inregs, outregs;
     inregs.h.ah = 0x00; //Leer pulsacion de tecla
     int86(0x16, &inregs, &outregs);
@@ -240,9 +221,10 @@ void _printCube(int begin, int size){
     _setvideomode(MODOTEXTO);
 }
 
-/*
-algoritmo Bresenham
-*/
+/**
+ * @brief algoritmo Bresenham, calcula lineas y las pinta los pixeles
+ * 
+ */
 int dx,dy,sx,sy,err,e2;
 void _drawLine(int x1, int y1,int x2, int y2,int color){
     dx = abs(x2-x1);
@@ -296,9 +278,8 @@ void _drawShapeTextColor(int x1, int y1, int x2, int y2, int colorFont, int colo
 
 void _drawCubeVideoColor(int x, int y, int color){
     union REGS inregs, outregs;
-    BYTE ret;
 
-    if((ret = _getvideomode()) != MODOGRAFICO){
+    if((_getvideomode()) != MODOGRAFICO){
         _setvideomode(MODOGRAFICO);
     }
     
