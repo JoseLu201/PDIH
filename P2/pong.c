@@ -1,64 +1,211 @@
-
 //  gcc pong.c -o pong -lncurses
-
+// ./pong
 #include <ncurses.h>
 #include <unistd.h>
+#include <stdio.h>
 
-#define DELAY 50000
+#define DELAY 40000
 
-int main(int argc, char *argv[]) {
-	
-	int height, width;
-	getmaxyx(stdscr,width,height);
-	
-	WINDOW *win = newwin(width,height,0,0);
 
-	int x = 5, y = 0;
-	int max_y = 25, max_x = 80;
-	int next_x = 0;
+typedef struct {
+    int x;      //Poisicon x
+    int y;      //Poisicon x
+    int x_dir;  //Direccion x
+    int y_dir;  //Direccion y
+} Ball;
+
+typedef struct {
+    int x;      //Posicion x
+    int y;      //Posicion y    
+    int length; //Longitud de la pala
+    int score;  //Puntuacion
+} Paddle;
+
+typedef struct {
+    int width;  // Ancho de la pantalla
+    int height; // Alto de la pantalla
+} Screen;
+
+void paddleCollision(Paddle *paddle, Ball *ball) {
+    // Comprobar colisión con la pala del jugador 1
+    if (ball->x == paddle->x + 1 && ball->y >= paddle->y && ball->y < paddle->y + paddle->length) {
+        ball->x_dir = 1;
+        ball->y_dir = (ball->y - paddle->y) / (paddle->length / 2) - 1;
+        ball->y += (paddle->y - ball->y) / paddle->length;
+    }
+
+    // Comprobar colisión con la pala del jugador 2
+    if (ball->x == paddle->x - 1 && ball->y >= paddle->y && ball->y < paddle->y + paddle->length) {
+        ball->x_dir = -1;
+        ball->y_dir = (ball->y - paddle->y) / (paddle->length / 2) - 1;
+        ball->y += (paddle->y - ball->y) / paddle->length;
+    }
+}
+
+int main(){
+    const int PAD_LEN = 3;
+    const int MARGIN = 3;
+
+    Screen screen;
+    
+    initscr();
+    noecho();
+    curs_set(FALSE);
+
+    //Colores para los diferentes objetos
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);     // Color de la puntuación
+    init_pair(2, COLOR_CYAN, COLOR_BLACK);       // Color barra central
+    init_pair(3, COLOR_YELLOW, COLOR_YELLOW);   // Color de la pelota
+    init_pair(4, COLOR_RED, COLOR_RED);         // Color de las barras
+
+    //Dimensiones de la pantalla
+    getmaxyx(stdscr,  screen.height, screen.width);
+
+    //Definicion de pelota
+    Ball ball = {screen.width / 2, screen.height / 2, 1, 1};
+
+    //Definicion de palas y jugadores
+    Paddle paddleP1 = {MARGIN, screen.height / 2, PAD_LEN, 0},
+           paddleP2 = {screen.width - MARGIN, screen.height / 2, PAD_LEN, 0};
+
+    
+    //pantalla de inicio de juego
+    WINDOW *init_screen = newwin(screen.height, screen.width, 0, 0);
+    box(init_screen, '|', '-');
+    int mid = screen.width/2 - 81/2;
+    mvprintw(2,mid,  " .----------------.  .----------------.  .-----------------. .----------------. "); 
+    mvprintw(3,mid,  "| .--------------. || .--------------. || .--------------. || .--------------. |");
+    mvprintw(4,mid,  "| |   ______     | || |     ____     | || | ____  _____  | || |    ______    | |");
+    mvprintw(5,mid,  "| |  |_   __ \\   | || |   .'    `.   | || ||_   \\|_   _| | || |  .' ___  |   | |");
+    mvprintw(6,mid,  "| |    | |__) |  | || |  /  .--.  \\  | || |  |   \\ | |   | || | / .'   \\_|   | |");
+    mvprintw(7,mid,  "| |    |  ___/   | || |  | |    | |  | || |  | |\\ \\| |   | || | | |    ____  | |");
+    mvprintw(8,mid,  "| |   _| |_      | || |  \\  `--'  /  | || | _| |_\\   |_  | || | \\ `.___]  _| | |");
+    mvprintw(9,mid,  "| |  |_____|     | || |   `.____.'   | || ||_____|\\____| | || |  `._____.'   | |");
+    mvprintw(10,mid, "| |              | || |              | || |              | || |              | |");
+    mvprintw(11,mid, "| '--------------' || '--------------' || '--------------' || '--------------' |");
+    mvprintw(12,mid, " '----------------'  '----------------'  '----------------'  '----------------' ");
+
+    //Controles de juego
+            
+    mvprintw(15, mid , " .----------------------------------CONTROLES---------------------------------. ");
+    mvprintw(16, 55, "Player 1");
+    mvprintw(17, 53.5, "UP   -> W");
+    mvprintw(18, 53.5, "DOWN -> S");
+
+    mvprintw(16, 105, "Player 2");
+    mvprintw(17, 103.5, "UP   -> ^ (flecha arriba)");
+    mvprintw(18, 103.5, "DOWN -> v (flecha abajo)");
+    
+    //Añadir lo que quieras
+    /**/
+
+    //Pulsamos cualquier tecla para continuar.
+    getch();
+
+    //Definimos la pantalla donde se jugara
+    WINDOW *game_screen = newwin(screen.height, screen.width, 0, 0); 
+
+    int next_x = 0;
 	int directionx = 1;
 	int next_y = 0;
 	int directiony = 1;
+    
+    keypad(game_screen, true);  //Captar teclas del teclado numerico
 
-	int xc = 20, yc = 10;
-	int ch = 0;
+    char cadPuntos[50];         // Cadena donde escribimos los puntos
+    while(paddleP1.score < 5 && paddleP2.score < 5) {
 
-	initscr();
-	noecho();
-	cbreak();
-	curs_set(FALSE);
-	nodelay(stdscr, TRUE);
-	box(stdscr,'|','-');
-	
-	while(1) {
-		clear();
-		mvprintw(y, x, "o");
-		mvprintw(yc, xc, "x");
-		refresh(win);
+        //Pintamos los bordes
+        wattron(game_screen, COLOR_PAIR(2));
+        box(game_screen, '|', '-');
+        wattroff(game_screen, COLOR_PAIR(2));
+        
+        //Pintamos la pelota
+		wattron(game_screen, COLOR_PAIR(3));
+        mvwprintw(game_screen,ball.y, ball.x, "o");
+        wattroff(game_screen, COLOR_PAIR(3));
 
-		ch = getch();
-		if (ch == 'o')
-			xc -= 1;
-		else if (ch == 'p')
-			xc += 1;
+        //Puntuacion
+        sprintf(cadPuntos, "%d\t%d", paddleP1.score,paddleP2.score);
+        mvwprintw(game_screen,1, screen.width / 2 - 3, cadPuntos);
+
+        //Linea central divisoria
+        mvwvline(game_screen, 1, screen.width / 2, ACS_VLINE, screen.height-2);
+        
+        //Linea horizontal
+        //mvwhline(game_screen, screen.height / 2, 2, ACS_HLINE, screen.width-2);
+        
+        //Mover el conjunto de la pala
+        wattron(game_screen, COLOR_PAIR(4));
+        for (int i = 0; i < PAD_LEN ; i++){
+            mvwprintw(game_screen, paddleP1.y + i, paddleP1.x, "|");
+            mvwprintw(game_screen, paddleP2.y + i, paddleP2.x, "|");
+        }
+        wattroff(game_screen, COLOR_PAIR(4));
+        
+        //Recoger pulsacion de teclas
+        nodelay(game_screen, true); 
+        switch (wgetch(game_screen)){
+            case 'w':
+            case 'W':
+                if(paddleP1.y > 1){
+                    
+                    paddleP1.y--;
+                }
+                break;
+            case 's':
+            case 'S':
+                if(paddleP1.y < screen.height - 2)
+                    paddleP1.y++;
+                break;
+            case KEY_UP:
+                if(paddleP2.y > 1)
+                    paddleP2.y--;
+                break;
+
+            case KEY_DOWN:
+                if(paddleP2.y < screen.height - 2)
+                    paddleP2.y++;
+                break;
+        }
 		
 		usleep(DELAY);
 
-		next_x = x + directionx;
-		next_y = y + directiony;
+		next_x = ball.x + ball.x_dir;
+		next_y = ball.y + ball.y_dir;
 
-		if (next_x >= max_x || next_x < 0) {
-			directionx*= -1;
+        paddleCollision(&paddleP1, &ball);
+        paddleCollision(&paddleP2, &ball);
+
+        if ( next_x >= screen.width){
+            paddleP1.score++;
+            ball.x = screen.width / 2;
+            ball.y = screen.height / 2; 
+        }
+
+        if ( next_x < 0){
+            paddleP2.score++;
+            ball.x = screen.width / 2;
+            ball.y = screen.height / 2;
+        }
+
+		if (next_x >= screen.width || next_x < 0) {
+			ball.x_dir*= -1;
 		} else {
-			x+= directionx;
+			ball.x+= ball.x_dir;
 		}
 
-		if (next_y >= max_y || next_y < 0) {
-			directiony*= -1;
+		if (next_y >= screen.height -1 || next_y < 1) {
+			ball.y_dir*= -1;
 		} else {
-			y+= directiony;
+			ball.y+= ball.y_dir;
 		}
-	}
+        
+        werase(game_screen);
+    }
 
-	endwin();
+    endwin();
+    return 0;
+
 }
