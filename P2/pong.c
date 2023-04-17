@@ -65,16 +65,19 @@ void reset_game(Screen *screen, Ball *ball, Paddle *p1,Paddle *p2){
     init_Paddle(p2, screen->width - MARGIN, screen->height / 2, PAD_LEN, 0);
 }
 bool menuFinal(WINDOW *w,Screen *screen, Paddle *p1,Paddle *p2){
+    char cadPuntos[50];
     box(w,'$','$');
     int shift = screen->width/2 - 10;
+    sprintf(cadPuntos, "%d\t -  %d", p1->score,p2->score);
+    mvwprintw(w,screen->height/2-4, shift+10, cadPuntos);
     if(p1->score > p2->score)
-	    mvwprintw(w,2,shift,  " El ganador a sido el jugador1 ");
+	    mvwprintw(w,screen->height/2-2,shift,  " El ganador a sido el jugador1 ");
     else if(p1->score < p2->score)
-        mvwprintw(w,2,shift,  " El ganador a sido el jugador2 ");
+        mvwprintw(w,screen->height/2-2,shift,  " El ganador a sido el jugador2 ");
     else
-        mvwprintw(w,3,shift,  " Empate!");
-	mvwprintw(w,4,shift,  " Pulsa ENTER para jugar de nuevo ");  
-	mvwprintw(w,5,shift,  " Pulsa Q para salir del juego "); 
+        mvwprintw(w,screen->height/2-2,shift,  " \t      Empate!");
+	mvwprintw(w,screen->height/2,shift,  " Pulsa ENTER para jugar de nuevo ");  
+	mvwprintw(w,screen->height/2+1,shift,  " Pulsa Q para salir del juego "); 
 
     switch (wgetch(w)){
         case KEY_ENTER:
@@ -98,7 +101,7 @@ int main(){
     start_color();
     init_pair(1, COLOR_WHITE, COLOR_BLACK);     // Color de la puntuación
     init_pair(2, COLOR_CYAN, COLOR_BLACK);       // Color barra central
-    init_pair(3, COLOR_YELLOW, COLOR_YELLOW);   // Color de la pelota
+    init_pair(3, COLOR_YELLOW, COLOR_BLACK);   // Color de la pelota
     init_pair(4, COLOR_RED, COLOR_RED);         // Color de las barras
 
     //Dimensiones de la pantalla
@@ -139,6 +142,10 @@ int main(){
     mvprintw(16, 105, "Player 2");
     mvprintw(17, 103.5, "UP   -> ^ (flecha arriba)");
     mvprintw(18, 103.5, "DOWN -> v (flecha abajo)");
+
+    mvprintw(screen.height-6, 90, "Realizado por: ");
+    mvprintw(screen.height-5, 90, "Jose Luis Molina Aguilar");
+    mvprintw(screen.height-4 , 90, "Sergio España Maldonado");
     
     //Añadir lo que quieras
     getch();
