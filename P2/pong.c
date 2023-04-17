@@ -3,8 +3,11 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #define DELAY 40000
+#define PAD_LEN 3
+#define MARGIN 3
 
 
 typedef struct {
@@ -42,9 +45,48 @@ void paddleCollision(Paddle *paddle, Ball *ball) {
     }
 }
 
+void init_Ball(Ball *b, int x, int y, int xdir, int ydir){
+    b->x = x;
+    b->y = y;
+    b->x_dir = xdir;
+    b->y_dir = ydir;
+}
+
+void init_Paddle(Paddle *p, int x, int y, int len, int sc){
+    p->x = x;
+    p->y = y;
+    p->length = len;
+    p->score = sc;
+}
+
+void reset_game(Screen *screen, Ball *ball, Paddle *p1,Paddle *p2){
+    init_Ball(ball, screen->width / 2, screen->height / 2, 1, 1);
+    init_Paddle(p1, MARGIN, screen->height / 2, PAD_LEN, 0);
+    init_Paddle(p2, screen->width - MARGIN, screen->height / 2, PAD_LEN, 0);
+}
+bool menuFinal(WINDOW *w,Screen *screen, Paddle *p1,Paddle *p2){
+    box(w,'$','$');
+    int shift = screen->width/2 - 10;
+    if(p1->score > p2->score)
+	    mvwprintw(w,2,shift,  " El ganador a sido el jugador1 ");
+    else if(p1->score < p2->score)
+        mvwprintw(w,2,shift,  " El ganador a sido el jugador2 ");
+    else
+        mvwprintw(w,3,shift,  " Empate!");
+	mvwprintw(w,4,shift,  " Pulsa ENTER para jugar de nuevo ");  
+	mvwprintw(w,5,shift,  " Pulsa Q para salir del juego "); 
+
+    switch (wgetch(w)){
+        case KEY_ENTER:
+            return true;
+        case 'q':
+        case 'Q':
+            return false;
+    }
+}
 int main(){
-    const int PAD_LEN = 3;
-    const int MARGIN = 3;
+   
+    bool terminar = false;
 
     Screen screen;
     
@@ -63,12 +105,13 @@ int main(){
     getmaxyx(stdscr,  screen.height, screen.width);
 
     //Definicion de pelota
-    Ball ball = {screen.width / 2, screen.height / 2, 1, 1};
+    Ball ball;
+    init_Ball(&ball, screen.width / 2, screen.height / 2, 1, 1);
 
     //Definicion de palas y jugadores
-    Paddle paddleP1 = {MARGIN, screen.height / 2, PAD_LEN, 0},
-           paddleP2 = {screen.width - MARGIN, screen.height / 2, PAD_LEN, 0};
-
+    Paddle paddleP1, paddleP2;
+    init_Paddle(&paddleP1, MARGIN, screen.height / 2, PAD_LEN, 0);
+    init_Paddle(&paddleP2, screen.width - MARGIN, screen.height / 2, PAD_LEN, 0);
     
     //pantalla de inicio de juego
     WINDOW *init_screen = newwin(screen.height, screen.width, 0, 0);
@@ -98,113 +141,133 @@ int main(){
     mvprintw(18, 103.5, "DOWN -> v (flecha abajo)");
     
     //Añadir lo que quieras
-    /**/
+    getch();
+   
 
     //Pulsamos cualquier tecla para continuar.
-    getch();
+    
 
     //Definimos la pantalla donde se jugara
     WINDOW *game_screen = newwin(screen.height, screen.width, 0, 0); 
 
     int next_x = 0;
-	int directionx = 1;
-	int next_y = 0;
-	int directiony = 1;
+    int directionx = 1;
+    int next_y = 0;
+    int directiony = 1;
     
     keypad(game_screen, true);  //Captar teclas del teclado numerico
 
-    char cadPuntos[50];         // Cadena donde escribimos los puntos
-    while(paddleP1.score < 5 && paddleP2.score < 5) {
+    while (!terminar){
+        char cadPuntos[50];         // Cadena donde escribimos los puntos
 
-        //Pintamos los bordes
-        wattron(game_screen, COLOR_PAIR(2));
-        box(game_screen, '|', '-');
-        wattroff(game_screen, COLOR_PAIR(2));
-        
-        //Pintamos la pelota
-		wattron(game_screen, COLOR_PAIR(3));
-        mvwprintw(game_screen,ball.y, ball.x, "o");
-        wattroff(game_screen, COLOR_PAIR(3));
+       
+        while(paddleP1.score < 5 && paddleP2.score < 5 && !terminar) {
+            
+            //Pintamos los bordes
+            wattron(game_screen, COLOR_PAIR(2));
+            box(game_screen, '|', '-');
+            wattroff(game_screen, COLOR_PAIR(2));
+            
+            //Pintamos la pelota
+            wattron(game_screen, COLOR_PAIR(3));
+            mvwprintw(game_screen,ball.y, ball.x, "o");
+            wattroff(game_screen, COLOR_PAIR(3));
 
-        //Puntuacion
-        sprintf(cadPuntos, "%d\t%d", paddleP1.score,paddleP2.score);
-        mvwprintw(game_screen,1, screen.width / 2 - 3, cadPuntos);
+            //Puntuacion
+            sprintf(cadPuntos, "%d\t%d", paddleP1.score,paddleP2.score);
+            mvwprintw(game_screen,1, screen.width / 2 - 3, cadPuntos);
 
-        //Linea central divisoria
-        mvwvline(game_screen, 1, screen.width / 2, ACS_VLINE, screen.height-2);
-        
-        //Linea horizontal
-        //mvwhline(game_screen, screen.height / 2, 2, ACS_HLINE, screen.width-2);
-        
-        //Mover el conjunto de la pala
-        wattron(game_screen, COLOR_PAIR(4));
-        for (int i = 0; i < PAD_LEN ; i++){
-            mvwprintw(game_screen, paddleP1.y + i, paddleP1.x, "|");
-            mvwprintw(game_screen, paddleP2.y + i, paddleP2.x, "|");
-        }
-        wattroff(game_screen, COLOR_PAIR(4));
-        
-        //Recoger pulsacion de teclas
-        nodelay(game_screen, true); 
-        switch (wgetch(game_screen)){
-            case 'w':
-            case 'W':
-                if(paddleP1.y > 1){
+            //Linea central divisoria
+            mvwvline(game_screen, 1, screen.width / 2, ACS_VLINE, screen.height-2);
+            
+            //Linea horizontal
+            //mvwhline(game_screen, screen.height / 2, 2, ACS_HLINE, screen.width-2);
+            
+            //Mover el conjunto de la pala
+            wattron(game_screen, COLOR_PAIR(4));
+            for (int i = 0; i < PAD_LEN ; i++){
+                mvwprintw(game_screen, paddleP1.y + i, paddleP1.x, "|");
+                mvwprintw(game_screen, paddleP2.y + i, paddleP2.x, "|");
+            }
+            wattroff(game_screen, COLOR_PAIR(4));
+            
+            //Recoger pulsacion de teclas
+            nodelay(game_screen, true); 
+            switch (wgetch(game_screen)){
+                case 'q':
+                case 'Q':
                     
-                    paddleP1.y--;
-                }
-                break;
-            case 's':
-            case 'S':
-                if(paddleP1.y < screen.height - 2)
-                    paddleP1.y++;
-                break;
-            case KEY_UP:
-                if(paddleP2.y > 1)
-                    paddleP2.y--;
-                break;
+                    terminar = true;
+                    //werase(game_screen);
+                    
+                    break;
 
-            case KEY_DOWN:
-                if(paddleP2.y < screen.height - 2)
-                    paddleP2.y++;
-                break;
+                case 'w':
+                case 'W':
+                    if(paddleP1.y > 1){
+                        
+                        paddleP1.y--;
+                    }
+                    break;
+                case 's':
+                case 'S':
+                    if(paddleP1.y < screen.height - 2)
+                        paddleP1.y++;
+                    break;
+                case KEY_UP:
+                    if(paddleP2.y > 1)
+                        paddleP2.y--;
+                    break;
+
+                case KEY_DOWN:
+                    if(paddleP2.y < screen.height - 2)
+                        paddleP2.y++;
+                    break;
+
+            }
+            
+            usleep(DELAY);
+
+            next_x = ball.x + ball.x_dir;
+            next_y = ball.y + ball.y_dir;
+
+            paddleCollision(&paddleP1, &ball);
+            paddleCollision(&paddleP2, &ball);
+
+            if ( next_x >= screen.width){
+                paddleP1.score++;
+                ball.x = screen.width / 2;
+                ball.y = screen.height / 2; 
+            }
+
+            if ( next_x < 0){
+                paddleP2.score++;
+                ball.x = screen.width / 2;
+                ball.y = screen.height / 2;
+            }
+
+            if (next_x >= screen.width || next_x < 0) {
+                ball.x_dir*= -1;
+            } else {
+                ball.x+= ball.x_dir;
+            }
+
+            if (next_y >= screen.height -1 || next_y < 1) {
+                ball.y_dir*= -1;
+            } else {
+                ball.y+= ball.y_dir;
+            }
+            
+            werase(game_screen);
         }
-		
-		usleep(DELAY);
-
-		next_x = ball.x + ball.x_dir;
-		next_y = ball.y + ball.y_dir;
-
-        paddleCollision(&paddleP1, &ball);
-        paddleCollision(&paddleP2, &ball);
-
-        if ( next_x >= screen.width){
-            paddleP1.score++;
-            ball.x = screen.width / 2;
-            ball.y = screen.height / 2; 
-        }
-
-        if ( next_x < 0){
-            paddleP2.score++;
-            ball.x = screen.width / 2;
-            ball.y = screen.height / 2;
-        }
-
-		if (next_x >= screen.width || next_x < 0) {
-			ball.x_dir*= -1;
-		} else {
-			ball.x+= ball.x_dir;
-		}
-
-		if (next_y >= screen.height -1 || next_y < 1) {
-			ball.y_dir*= -1;
-		} else {
-			ball.y+= ball.y_dir;
-		}
+    
+        WINDOW *end_screen = newwin(screen.height, screen.width, 0, 0); 
+        terminar = menuFinal(end_screen,&screen ,&paddleP1,&paddleP2);
+        if(terminar) reset_game(&screen, &ball, &paddleP1, &paddleP2);
+        else break;
+        wrefresh(end_screen);
         
-        werase(game_screen);
     }
-
     endwin();
     return 0;
 
