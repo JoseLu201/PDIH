@@ -24,6 +24,7 @@ if cap.isOpened():
                 final = True
         else:
             final = True
+            
 else:
     print("No se pudo acceder a la cámara.")
 

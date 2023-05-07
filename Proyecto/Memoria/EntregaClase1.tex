@@ -1,0 +1,141 @@
+\input{preambuloSimple.tex}
+\usepackage{listings}
+
+\everymath{\displaystyle}
+%----------------------------------------------------------------------------------------
+%	TÍTULO Y DATOS DEL ALUMNO
+%----------------------------------------------------------------------------------------
+
+\title{	
+\normalfont \normalsize 
+\textsc{\textbf{Periféricos y Dispositivos de Interfaz Humana} \\ Grado en Ingeniería Informática \\ Universidad de Granada} \\ [25pt] % Your university, school and/or department name(s)
+\horrule{0.5pt} \\[0.4cm] % Thin top horizontal rule
+\huge Reconocimiento Facial  \\ % The assignment title
+\horrule{2pt} \\[0.5cm] % Thick bottom horizontal rule
+\includegraphics[width=5cm]{logo}\\[8ex]
+}
+
+
+
+
+\author{José Luis Molina Aguilar y Sergio España Maldonado} % Nombre y apellidos
+
+\date{\normalsize\today} % Incluye la fecha actual
+
+
+%----------------------------------------------------------------------------------------
+% DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+
+\maketitle % Muestra el Título
+  \begin{large}
+    \centering
+  \vfill
+  
+  Curso 2022-2023\\
+  Correo : joselu201@correo.ugr.es
+  \vfill
+  \end{large}
+\newpage %inserta un salto de página
+
+\tableofcontents % para generar el índice de contenidos
+
+%\listoftables -----------------------------------------------------------
+
+
+\newpage
+
+
+
+%----------------------------------------------------------------------------------------
+%	Cuestión 1
+%----------------------------------------------------------------------------------------
+\newpage
+\section{Descripción}
+Vamos a ver dos programas para detectar caras y otro para el reconocimiento de caras,
+utilizaremos en ambos opencv, el primer programa usa algoritmo de cascada para 
+detectar caras
+el segundo utiliza el modulo de face recognition el cual utiliza deep learning.
+
+\url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}
+\section{ Deteccion de caras vs Reconocimiento facial}
+
+La detección de caras y el reconocimiento facial son dos términos relacionados 
+pero diferentes en el procesamiento de imágenes y la inteligencia artificial.\\
+
+La detección de caras se refiere a la capacidad de detectar la presencia de una 
+cara humana en una imagen o video y ubicarla dentro de la imagen. \\
+
+El reconocimiento facial, por otro lado, se refiere a la capacidad de identificar 
+una persona en función de sus características faciales. El reconocimiento facial se 
+basa en la comparación de las características faciales de una persona con una base 
+de datos previamente almacenada de características faciales de personas conocidas.\\
+
+Esta técnica se utiliza en muchas aplicaciones, como la seguridad, el control 
+de acceso y la identificación de personas en fotografías o videos.
+
+\section{Modelos de cascada}
+Los modelos de cascada son un tipo de algoritmo de detección de objetos que se 
+utilizan comúnmente para la detección de rostros en imágenes y videos. 
+La detección de cascada se basa en la utilización de una cascada de 
+clasificadores que funcionan en serie, donde cada clasificador toma una 
+decisión sobre la presencia o ausencia de la característica de interés en una
+ determinada región de la imagen.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{cascade1}
+  \caption{Tipo de Característica}\label{fig:característica}
+\end{figure}
+
+Cada característica es un valor único obtenido al restar la suma de píxeles 
+debajo del rectángulo blanco de la suma de píxeles debajo del rectángulo negro.
+
+La ventaja de los modelos de cascada es que pueden ser muy rápidos y eficientes 
+en la detección de objetos en imágenes y videos, lo que los hace útiles para 
+aplicaciones en tiempo real. Sin embargo, también pueden tener limitaciones en 
+la detección de objetos en situaciones variables de iluminación, posición y escala
+
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{cascade2}
+  \caption{Ejemplo de características}\label{fig:ejemplo_característica}
+\end{figure}
+
+La fila superior muestra dos buenas características.\\
+La primera característica seleccionada parece centrarse en la propiedad de 
+que la región de los ojos suele ser más oscura que la región de la nariz y las mejillas.\\ 
+La segunda característica seleccionada se basa en la propiedad de que los ojos son más 
+oscuros que el puente de la nariz.\\
+
+
+Dependiento de lo que queramos detectar, instanciaremos el clasificador de 
+cascada con los diferentes modelos preentrenados que nos ofrece opencv.
+
+\url{https://github.com/opencv/opencv/tree/4.x/data/haarcascades}
+
+\section{Python face\_recognition}
+
+Ahora utilizaremos un modulo de Python llamado face\_recognition
+\url{https://pypi.org/project/face-recognition/}
+necesitaremos tener un par de cosas instaladas antes, como cmake, dlib y visual studio.
+
+face-recognition es una herramienta de software libre y de código abierto
+que se utiliza para el reconocimiento facial y la detección de características en imágenes.\\
+
+Proporciona una interfaz de programación de aplicaciones (API) fácil de usar
+para realizar tareas de reconocimiento facial, incluyendo la detección de caras,
+la extracción de características faciales y la comparación de caras para
+la identificación de individuos.\\
+
+Una vez que se han detectado las caras, la biblioteca face-recognition
+utiliza un algoritmo de extracción de características faciales basado en 
+"dlib" para obtener un vector de características únicas para cada cara detectada.\\
+Estas características incluyen la forma de la cara, las distancias entre los ojos,
+la nariz y la boca, y otros detalles únicos que se utilizan para identificar a una persona.
+\end{document}
