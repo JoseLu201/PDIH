@@ -29,9 +29,9 @@ while not final:
     ret, framebgr = cap.read()
     if ret:
         #mini = cv2.resize(framergb, dsize=(300,300),fx=0.25, fy=0.25)
-        mini = framebgr
-        locs = face.face_locations(mini, model='hog') # cnn o hog 
-        cods = face.face_encodings(mini, locs, model='small') #podemos cambiar de larga a small para obtener mejor rendimeinto pero peor calidad
+        #mini = framebgr
+        locs = face.face_locations(framebgr, model='hog') # cnn o hog 
+        cods = face.face_encodings(framebgr, locs, model='small') #podemos cambiar de larga a small para obtener mejor rendimeinto pero peor calidad
         if locs is not None:
             for i in range(len(locs)):
                 if face.compare_faces(cod_micara, [cods[i]])[0]:
@@ -42,7 +42,7 @@ while not final:
                 dist = face.face_distance(cod_micara,[cods[i]])[0]
                 
                 cv2.rectangle(framebgr, (l,t), (r,b), color, 2)
-                cad = "Acuraccy " + str('%.3f'%dist)
+                cad = "Error " + str('%.3f'%dist)
                 img = cv2.cvtColor(framebgr, cv2.COLOR_BGR2RGB)
                 cv2.putText(framebgr, cad, (l,b+20), cv2.FONT_HERSHEY_TRIPLEX, 1, color)
         cv2.imshow("Video", framebgr)

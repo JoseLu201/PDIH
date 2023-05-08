@@ -1,5 +1,5 @@
 # Fdb version 3
-["pdflatex"] 1683558076 "EntregaClase1.tex" "EntregaClase1.pdf" "EntregaClase1" 1683558078
+["pdflatex"] 1683559341 "EntregaClase1.tex" "EntregaClase1.pdf" "EntregaClase1" 1683559344
   "/etc/texmf/web2c/texmf.cnf" 1637340237 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1095.600pk" 1637343380 24004 d000971f2e3e1cefb06b2b8dd008eb24 ""
   "/home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1440.600pk" 1637343324 34652 bac1fb7ca8f4c7da40256e15b9f9f753 ""
@@ -105,12 +105,14 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1520210507 32485 c64754543d8ac501bea6e75e209ea521 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1679349728 164837 f472f40ab643c6b1fa7fff8b04d446df ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1679349732 873941 a1311208b2cfe3be65c1135d3a8fb456 ""
-  "EntregaClase1.aux" 1683558078 1166 e1a029b13112ff0ec3ba4814797261ce ""
-  "EntregaClase1.tex" 1683558076 8185 6f994ddf6ce2863a53ccb47f071a5d54 ""
-  "EntregaClase1.toc" 1683558078 313 baada8445f8c16c8f7dbf4aa89f05b51 ""
+  "EntregaClase1.aux" 1683559344 1456 584b3cd1b01d45829241a51656d02a5d ""
+  "EntregaClase1.tex" 1683559338 8604 b9d0d30a058cc32d268b3966ed31904d ""
+  "EntregaClase1.toc" 1683559344 313 baada8445f8c16c8f7dbf4aa89f05b51 ""
   "algorithmicx.sty" 1681124543 26750 ce139c05a983e19ddca355b43e29c395 ""
   "algpseudocode.sty" 1681124543 3457 d9077efe6b74c5a094199256af8d7d9a ""
   "fourier.sty" 1681124543 0 d41d8cd98f00b204e9800998ecf8427e ""
+  "images/caras_1.png" 1683558981 1091930 8fca0c8ad1445f88722579a263180763 ""
+  "images/caras_2.png" 1683559032 1086690 19c0cb165d61fb77fe646327374e93dc ""
   "images/cascade1.png" 1683464244 30403 5bb6dbf5142dbac97f3751ca4312b730 ""
   "images/cascade2.png" 1683464358 26819 72709d96e4e328759aa215c1d8dbe0ea ""
   "images/haarcascade.png" 1683554983 22397 1b31a34c5c0177fa5223a4f06aab2c77 ""

@@ -59,9 +59,12 @@ Vamos a ver dos programas para detectar caras y otro para el reconocimiento de c
 utilizaremos en ambos Opencv, el primer programa usa algoritmo de cascada para 
 detectar caras
 el segundo utiliza el modulo de face recognition el cual utiliza deep learning.
+\url{https://opencv.org/}
+
+\section{ Detección de caras vs Reconocimiento facial}
+
 
 \url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}
-\section{ Detección de caras vs Reconocimiento facial}
 
 La detección de caras y el reconocimiento facial son dos términos relacionados 
 pero diferentes en el procesamiento de imágenes y la inteligencia artificial.\\
@@ -125,7 +128,7 @@ cascada con los diferentes modelos preentrenados que nos ofrece Opencv.
   \caption{Diferentes tipo de clasificadores}\label{fig:ejemplo_característica}
 \end{figure}
 
-
+Esto lo haremos de la siguiente forma:
 
 \begin{lstlisting}[language=Python]
   cascade = cv2.CascadeClassifier("haarcascade<ident>.xml")
@@ -141,7 +144,12 @@ es importante destacar que hay que convertir el frame en rgb a escala de grises,
 esto nos devuelve las coordenadas de la parte superior izquierda de la cara y su 
 ancho y largo
 
-
+Vemos resultado de este programa.\\
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{caras_1}
+  \caption{}\label{fig:ejemplo_característica}
+\end{figure}
 
 
 \section{Python face\_recognition}
@@ -201,5 +209,11 @@ con las de la cámara
   face.compare_faces(cod_micara, cara_cam)
 \end{lstlisting}
 
+Vemos resultado de este programa.\\
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{caras_2}
+  \caption{}\label{fig:ejemplo_característica}
+\end{figure}
 
 \end{document}
