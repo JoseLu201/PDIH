@@ -56,12 +56,12 @@
 \newpage
 \section{Descripción}
 Vamos a ver dos programas para detectar caras y otro para el reconocimiento de caras,
-utilizaremos en ambos opencv, el primer programa usa algoritmo de cascada para 
+utilizaremos en ambos Opencv, el primer programa usa algoritmo de cascada para 
 detectar caras
 el segundo utiliza el modulo de face recognition el cual utiliza deep learning.
 
 \url{https://docs.opencv.org/3.4/db/d28/tutorial_cascade_classifier.html}
-\section{ Deteccion de caras vs Reconocimiento facial}
+\section{ Detección de caras vs Reconocimiento facial}
 
 La detección de caras y el reconocimiento facial son dos términos relacionados 
 pero diferentes en el procesamiento de imágenes y la inteligencia artificial.\\
@@ -114,10 +114,35 @@ La segunda característica seleccionada se basa en la propiedad de que los ojos 
 oscuros que el puente de la nariz.\\
 
 
-Dependiento de lo que queramos detectar, instanciaremos el clasificador de 
-cascada con los diferentes modelos preentrenados que nos ofrece opencv.
+Dependiendo de lo que queramos detectar, instanciaremos el clasificador de 
+cascada con los diferentes modelos preentrenados que nos ofrece Opencv.
 
 \url{https://github.com/opencv/opencv/tree/4.x/data/haarcascades}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{haarcascade}
+  \caption{Diferentes tipo de clasificadores}\label{fig:ejemplo_característica}
+\end{figure}
+
+
+
+\begin{lstlisting}[language=Python]
+  cascade = cv2.CascadeClassifier("haarcascade<ident>.xml")
+\end{lstlisting}
+
+y ahora simplemente le pediremos que nos identifique de cada frame de la cámara las caras de la siguiente forma:
+
+\begin{lstlisting}[language=Python]
+  res = cascade.detectMultiScale(frame_gris)
+\end{lstlisting}
+
+es importante destacar que hay que convertir el frame en rgb a escala de grises,
+esto nos devuelve las coordenadas de la parte superior izquierda de la cara y su 
+ancho y largo
+
+
+
 
 \section{Python face\_recognition}
 
@@ -137,5 +162,44 @@ Una vez que se han detectado las caras, la biblioteca face-recognition
 utiliza un algoritmo de extracción de características faciales basado en 
 "dlib" para obtener un vector de características únicas para cada cara detectada.\\
 Estas características incluyen la forma de la cara, las distancias entre los ojos,
-la nariz y la boca, y otros detalles únicos que se utilizan para identificar a una persona.
+la nariz y la boca, y otros detalles únicos que se utilizan para identificar a una persona.\\
+
+Es importante destacar que Opencv utiliza los colores bgr (blue, green, red)
+en vez de rgb, por esto mismo cada vez que leamos una imagen tendremos que modificar 
+su representación ya que face\_recognition si que utiliza rgb.
+
+Utilizaremos la función face\_location para localizar las caras de la imagen
+\begin{lstlisting}[language=Python]
+  import face_recognition as face
+  locs = face.face_locations(framergb)
+\end{lstlisting}
+
+una vez que tenemos esto para poder diferenciar a las personas tendremos que buscar sus
+característica faciales, eso lo haremos de la siguiente forma. 
+
+\begin{lstlisting}[language=Python]
+  lands = face.face_landmarks(framergb)
+\end{lstlisting}
+
+Ahora tenemos un diccionario en el cual representamos la facción de la cara con su valor.
+Ahora que tenemos esto, para comparar las caras y determinar la identidad utilizaremos 
+face encodings que devuelve un vector de característica.
+Estos vectores de características se pueden utilizar para identificar y comparar caras.
+
+\begin{lstlisting}[language=Python]
+  cod_micara = face.face_encodings(framergb,locs,model='small')[0]
+\end{lstlisting}
+
+Le pasamos la imagen y las posiciones donde hemos localizado las caras, tenemos un tercer parámetro
+que indica el modelo este se utiliza para especificar el modelo que se utilizará para la detección de caras.
+Puede ser 'small' para un modelo más rápido pero menos preciso, o 'large' para un modelo más preciso pero más lento.
+
+Ahora simplemente repetiremos estos pasos con cada imagen de la cámara para poder comparar la imagen de referencia
+con las de la cámara
+
+\begin{lstlisting}[language=Python]
+  face.compare_faces(cod_micara, cara_cam)
+\end{lstlisting}
+
+
 \end{document}

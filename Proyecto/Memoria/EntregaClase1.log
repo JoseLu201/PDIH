@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2023.3.20)  7 MAY 2023 15:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2023.3.20)  8 MAY 2023 17:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -717,6 +717,10 @@ Package: listings 2015/06/04 1.6 (Carsten Heinz)
 (./EntregaClase1.aux
 LaTeX Info: Redefining \. on input line 7.
 LaTeX Info: Redefining \% on input line 7.
+
+
+LaTeX Warning: Label `fig:ejemplo_caracter\IeC {\'\i }stica' multiply defined.
+
 )
 \openout1 = `EntregaClase1.aux'.
 
@@ -738,6 +742,7 @@ File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
 LaTeX Info: Redefining \. on input line 30.
 LaTeX Info: Redefining \% on input line 30.
+
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count130
@@ -917,44 +922,68 @@ Underfull \hbox (badness 10000) in paragraph at lines 110--115
 
  []
 
-
-Overfull \hbox (15.88322pt too wide) in paragraph at lines 124--127
+<images/haarcascade.png, id=22, 203.5605pt x 473.3685pt>
+File: images/haarcascade.png Graphic file (type png)
+<use images/haarcascade.png>
+Package pdftex.def Info: images/haarcascade.png  used on input line 124.
+(pdftex.def)             Requested size: 209.12778pt x 486.33986pt.
+[4 <./images/cascade1.png> <./images/cascade2.png>]
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) [5 <./images/haarcascade.png>]
+Overfull \hbox (15.88322pt too wide) in paragraph at lines 149--152
 []\T1/ptm/m/n/10.95 Ahora uti-li-za-re-mos un mo-du-lo de Pyt-hon lla-ma-do fa-
 ce_recognition $\T1/cmtt/m/n/10.95 https : / / pypi . org / project /
  []
 
-[4 <./images/cascade1.png> <./images/cascade2.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 128--130
+
+Underfull \hbox (badness 10000) in paragraph at lines 153--155
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--135
+Underfull \hbox (badness 10000) in paragraph at lines 156--160
 
  []
 
-[5] (./EntregaClase1.aux
+
+Underfull \hbox (badness 10000) in paragraph at lines 161--166
+
+ []
+
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 173.
+
+Overfull \hbox (15.36795pt too wide) in paragraph at lines 190--191
+[][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+[6] [7] (./EntregaClase1.aux
 LaTeX Info: Redefining \. on input line 7.
 LaTeX Info: Redefining \% on input line 7.
-) ) 
+)
+
+LaTeX Warning: There were multiply-defined labels.
+
+ ) 
 Here is how much of TeX's memory you used:
- 9244 strings out of 494788
- 142481 string characters out of 6177222
- 296754 words of memory out of 5000000
- 12397 multiletter control sequences out of 15000+600000
- 43088 words of font info for 66 fonts, out of 8000000 for 9000
+ 9716 strings out of 494788
+ 147034 string characters out of 6177222
+ 310129 words of memory out of 5000000
+ 12863 multiletter control sequences out of 15000+600000
+ 44784 words of font info for 67 fonts, out of 8000000 for 9000
  85 hyphenation exceptions out of 8191
- 52i,10n,54p,8852b,430s stack positions out of 5000i,500n,10000p,200000b,80000s
- </home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.6
-00pk> </home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1095
-.600pk> </home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx14
-40.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share
-/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-
-dist/fonts/type1/urw/times/utmr8a.pfb>
-Output written on EntregaClase1.pdf (5 pages, 357777 bytes).
+ 52i,10n,54p,8852b,1229s stack positions out of 5000i,500n,10000p,200000b,80000s
+ </home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.60
+0pk> </home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1095.
+600pk> </home/joselu/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx144
+0.600pk>{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/
+texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/urw/times/utmr8a.pfb>
+Output written on EntregaClase1.pdf (7 pages, 380128 bytes).
 PDF statistics:
- 138 PDF objects out of 1000 (max. 8388607)
- 32 compressed objects within 1 object stream
+ 148 PDF objects out of 1000 (max. 8388607)
+ 38 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

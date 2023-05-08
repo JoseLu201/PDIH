@@ -1,5 +1,5 @@
 \babel@toc {spanish}{}
 \contentsline {section}{\numberline {1}Descripci\IeC {\'o}n}{3}
-\contentsline {section}{\numberline {2}Deteccion de caras vs Reconocimiento facial}{3}
+\contentsline {section}{\numberline {2}Detecci\IeC {\'o}n de caras vs Reconocimiento facial}{3}
 \contentsline {section}{\numberline {3}Modelos de cascada}{3}
-\contentsline {section}{\numberline {4}Python face\_recognition}{5}
+\contentsline {section}{\numberline {4}Python face\_recognition}{6}
