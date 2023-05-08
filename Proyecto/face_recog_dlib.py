@@ -4,7 +4,7 @@ import cv2
 import face_recognition as face
 
 # Cargamos la cara la cual queremos RECONOCER
-frame = cv2.imread("done.png")
+frame = cv2.imread("cara.png")
 
 framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
