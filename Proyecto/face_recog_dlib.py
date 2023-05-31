@@ -1,5 +1,3 @@
-# pip install dlib
-# pip install face_recognition
 import cv2
 import face_recognition as face
 
@@ -9,7 +7,7 @@ frame = cv2.imread("cara.png")
 framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
 # Localizamos la cara de la imagen
-locs = face.face_locations(framergb)
+locs = face.face_locations(framergb, model='hog')
 
 if locs is not None:
     for i in range(len(locs)):

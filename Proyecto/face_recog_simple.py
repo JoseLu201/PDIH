@@ -3,6 +3,7 @@ import numpy as np
 
 #Instancia del clasificador de cascada con caras frontales
 cascade = cv2.CascadeClassifier("haarcascade_frontalface_alt.xml")
+#cascade = cv2.CascadeClassifier("haarcascade_fullbody.xml")
 
 #Abrimos la camara webcam
 cap = cv2.VideoCapture(0)
@@ -15,6 +16,7 @@ if cap.isOpened():
     while not final:
         #Leemos el frame en formato BGR
         ret, framebgr = cap.read()
+        # framebgr = cv2.imread("recog.jpg")
         frame_gris = cv2.cvtColor(framebgr, cv2.COLOR_BGR2GRAY)
         if ret:
             # Detectamos en la imagen lo que hayamos pedido.
